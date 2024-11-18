@@ -12,7 +12,7 @@ const restaurantSchema = new mongoose.Schema({
         zipcode: { type: String, required: true },
         coord: { type: [Number], index: '2dsphere' }
     },
-    borough: { type: String, required: true },
+    borough: { type: String},
     cuisine: { type: String, required: true },
     grades: [
         {
@@ -24,8 +24,6 @@ const restaurantSchema = new mongoose.Schema({
 });
 
 const Restaurant = mongoose.model('restaurants', restaurantSchema);
-
-
 
 
 const db = {
