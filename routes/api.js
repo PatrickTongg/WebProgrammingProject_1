@@ -5,12 +5,6 @@ const { celebrate, Joi, errors, Segments } = require('celebrate');
 
 
 var router = express.Router();
-const config = JSON.parse(fs.readFileSync('config/config.json'));
-
-
-const mongoUser = config.mongodb.username;
-const mongoPassword = config.mongodb.password;
-const mongoURI = `mongodb+srv://${mongoUser}:${mongoPassword}@cluster19885.jm6vp.mongodb.net/sample_restaurants?retryWrites=true&w=majority&appName=Cluster19885`;
 
 const restaurantAddressSchema = Joi.object().keys({
   building: Joi.string().required(),
@@ -45,11 +39,6 @@ const updateRestaurantSchema = Joi.object().keys({
 
 
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  db.initialize(mongoURI);
-  res.send('API is Running');
-});
 
 router.post('/restaurants', celebrate({
   [Segments.BODY] : createRestaurantSchema
@@ -97,15 +86,19 @@ router.get('/restaurants/:id', async function(req, res, next) {
 
 router.put('/restaurants/:id', celebrate({
     [Segments.BODY]: updateRestaurantSchema
-  }, async (req, res, next) => {
+  }), async (req, res, next) => {
   try {
+    console.log('Updating restaurant with ID:', req.params.id);
     const updatedRestaurant = await db.updateRestaurantById(req.params.id, req.body);
+    if (!updatedRestaurant) {
+      return res.status(404).send({ message: 'Restaurant not found' });
+    }
     res.status(200).send(updatedRestaurant);
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Failed to update restaurant' });
   }
-}))
+})
 
 router.delete('/restaurants/:id', function(req, res, next) {
   try {

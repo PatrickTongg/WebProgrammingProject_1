@@ -5,7 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var apiRouter = require('./routes/api');
+const { db } = require('./utils/mongooseModule');
 var hbs = require('hbs');
+const fs = require("fs");
+const config = JSON.parse(fs.readFileSync('config/config.json'));
+const mongoUser = config.mongodb.username;
+const mongoPassword = config.mongodb.password;
+const mongoURI = `mongodb+srv://${mongoUser}:${mongoPassword}@cluster19885.jm6vp.mongodb.net/sample_restaurants?retryWrites=true&w=majority&appName=Cluster19885`;
 
 var app = express();
 
@@ -20,6 +26,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+(async () => {
+  try {
+    await db.initialize(mongoURI);
+    console.log('Database connection initialized successfully');
+  } catch (error) {
+    console.error('Failed to initialize database connection:', error);
+    process.exit(1); // Exit the process if the database connection fails
+  }
+})();
+
 app.use('/api', apiRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -28,6 +44,9 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+
+  console.error(`[${new Date().toISOString()}] ${err.stack}`);
+
   res.status(err.status || 500).json({
     message: err.message,
     error: req.app.get('env') === 'development' ? err : {}
