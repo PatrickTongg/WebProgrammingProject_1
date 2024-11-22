@@ -1,6 +1,4 @@
 var express = require('express');
-const fs = require("fs");
-const {mongoose,db} = require('../utils/mongooseModule');
 const { celebrate, Joi, errors, Segments } = require('celebrate');
 
 
@@ -102,8 +100,9 @@ router.put('/restaurants/:id', celebrate({
 
 router.delete('/restaurants/:id', function(req, res, next) {
   try {
-    db.deleteRestaurantById(req.params.id);
-    res.status(200).send();
+    db.deleteRestaurantById(req.params.id).then((r) => {
+      res.status(200).send({message: `Restaurant deleted:${r.restaurant_id}`});
+    })
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Failed to delete' });

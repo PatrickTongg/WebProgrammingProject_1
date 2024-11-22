@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var apiRouter = require('./routes/api');
+var viewRouter = require('./routes/view');
 const { db } = require('./utils/mongooseModule');
 var hbs = require('hbs');
 require('dotenv').config();
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 })();
 
 app.use('/api', apiRouter);
+app.use('/', viewRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -42,7 +44,6 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-
   console.error(`[${new Date().toISOString()}] ${err.stack}`);
 
   res.status(err.status || 500).json({
