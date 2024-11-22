@@ -7,11 +7,9 @@ var mongoose = require('mongoose');
 var apiRouter = require('./routes/api');
 const { db } = require('./utils/mongooseModule');
 var hbs = require('hbs');
-const fs = require("fs");
-const config = JSON.parse(fs.readFileSync('config/config.json'));
-const mongoUser = config.mongodb.username;
-const mongoPassword = config.mongodb.password;
-const mongoURI = `mongodb+srv://${mongoUser}:${mongoPassword}@cluster19885.jm6vp.mongodb.net/sample_restaurants?retryWrites=true&w=majority&appName=Cluster19885`;
+require('dotenv').config();
+
+const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CLUSTER_STRING}`;
 
 var app = express();
 
