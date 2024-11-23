@@ -22,16 +22,49 @@ const restaurantSchema = new mongoose.Schema({
     ]
 });
 
+const userSchema = new mongoose.Schema({
+    uname :{type: String, required: true,unique: true},
+    password : {type: String, required: true},
+
+});
+
+const User = mongoose.model('users', userSchema);
 const Restaurant = mongoose.model('restaurants', restaurantSchema);
 
+const userDb= {
+    initialize : async (mongoURI) => {
+        try {
+            await mongoose.connect(mongoURI);
+            console.log("Connected to MongoDB successfully.");
+            }
+            catch(err) {
+            console.log("Error connecting to MongoDB server");
+            console.log(err);
+        }
+    },
+    addUser:async (user) => {
+        try {
+            const newUser = new User(user);
+            await newUser.save();
+            console.log("New user added to MongoDB.");
+        } catch (error) {
+            console.error("Error adding new user to MongoDB:", error);
+        }
+    },
+    checkUser : async (user) => {
+        const userData = await User.findOne({uname: user.uname, password: user.password});
+        if (!userData) {
+            return false;
+        }else {
+            return userData;
+        }
+    }
+}
 
 const db = {
     initialize : async (mongoURI) => {
         try {
-            await mongoose.connect(mongoURI, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            });
+            await mongoose.connect(mongoURI);
             console.log("Connected to MongoDB successfully.");
         } catch (error) {
             console.error("MongoDB connection error:", error);
@@ -96,5 +129,6 @@ mongoose.connection.on("disconnected", () => {
 
 module.exports = {
     mongoose,
-    db
+    db,
+    userDb
 };

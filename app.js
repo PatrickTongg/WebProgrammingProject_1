@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var apiRouter = require('./routes/api');
 var viewRouter = require('./routes/view');
-const { db } = require('./utils/mongooseModule');
+const { db ,userDb} = require('./utils/mongooseModule');
 var hbs = require('hbs');
 require('dotenv').config();
 
@@ -26,11 +26,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 (async () => {
   try {
+    await userDb.initialize(mongoURI);
     await db.initialize(mongoURI);
     console.log('Database connection initialized successfully');
   } catch (error) {
     console.error('Failed to initialize database connection:', error);
-    process.exit(1); // Exit the process if the database connection fails
+    process.exit(1);
   }
 })();
 
