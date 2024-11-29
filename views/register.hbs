@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant System Login</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="javascripts/register.js"></script>
+</head>
+<body class="login-body">
+<div class="login-container">
+    <form>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+
+        <label for="reenter-password">Password:</label>
+        <input type="password" id="renter-password" name="renter-password" placeholder="Renter Password" required>
+        <button type="submit" id="submit">Log In</button>
+    </form>
+</div>
+<br>
+<a href="/register">New to The Web? Register Here</a>
+<div class="error-container">
+    {{#if error}}
+        <p>{{error}}</p>
+    {{/if}}
+</div>
