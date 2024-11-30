@@ -1,0 +1,40 @@
+<!-- views/restaurants.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurants</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+<h1>Restaurants</h1>
+<form id="filterForm">
+    <label for="borough">Borough:</label>
+    <input type="text" id="borough" name="borough" required>
+
+    <label for="perPage">Restaurants per page:</label>
+    <select id="perPage" name="perPage">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<div id="restaurantList">
+    {{#each restaurants}}
+        <div class="restaurant">
+            <h2>{{this.name}}</h2>
+            <p>{{this.cuisine}} - {{this.borough}}</p>
+            <p>{{this.address.street}}, {{this.address.building}}, {{this.address.zipcode}}</p>
+        </div>
+    {{/each}}
+</div>
+
+<button id="prevPage" {{#if isFirstPage}}disabled{{/if}}>Previous</button>
+<button id="nextPage" {{#if isLastPage}}disabled{{/if}}>Next</button>
+
+<script src="/javascripts/restaurantList.js"></script>
+</body>
+</html>
