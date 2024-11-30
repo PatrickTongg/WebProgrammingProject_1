@@ -1,5 +1,10 @@
 var express = require('express');
 const { celebrate, Joi, errors, Segments } = require('celebrate');
+// Dont remove
+const { db, userDb, User } = require('../utils/mongooseModule');
+const bcrypt = require('bcryptjs')
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 
 var router = express.Router();
@@ -36,7 +41,9 @@ const updateRestaurantSchema = Joi.object().keys({
 });
 
 
-
+router.get('/', (req, res) => {
+  console.log(crypto.randomBytes(64).toString('hex'))
+})
 
 router.post('/restaurants', celebrate({
   [Segments.BODY] : createRestaurantSchema
@@ -108,5 +115,49 @@ router.delete('/restaurants/:id', function(req, res, next) {
     res.status(500).send({ message: 'Failed to delete' });
   }
 })
+
+router.post('/register', async (req, res, next) => {
+  const {username, password} = req.body;
+  if (!username || !password) {
+    return res.status(400).send('username or password is missing');
+  }
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPass = bcrypt.hashSync(password, salt);
+
+    const user = {username, password: hashedPass};
+    const savedUser = await userDb.addUser(user);
+    res.status(201).send(savedUser);
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(409).send({message: 'Username already exists'});
+    } else {
+      console.error(error);
+      res.status(500).send({message: 'Error occurred while creating the user'});
+    }
+  }
+})
+
+router.post('/login', async (req, res, next) => {
+  const {username, password} = req.body;
+  if (!username || !password) {
+    return res.status(400).send('username or password is missing');
+  }
+
+  var user = new User({username: username, password: password});
+
+  var response = await userDb.checkUser(user);
+  if (response) {
+    let token = generateAccessToken(username);
+    return res.status(200).send({token});
+  } else {
+    return res.status(401).send({message: 'Incorrect user credentials'});
+  }
+
+})
+
+function generateAccessToken(username) {
+  return jwt.sign({username}, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+}
 
 module.exports = router;

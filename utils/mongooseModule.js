@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const {Model} = require("mongoose");
+const bcrypt = require('bcryptjs')
 
 
 const restaurantSchema = new mongoose.Schema({
@@ -23,7 +24,7 @@ const restaurantSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-    uname :{type: String, required: true,unique: true},
+    username :{type: String, required: true,unique: true},
     password : {type: String, required: true},
 
 });
@@ -52,12 +53,17 @@ const userDb= {
         }
     },
     checkUser : async (user) => {
-        const userData = await User.findOne({uname: user.uname, password: user.password});
+        const userData = await User.findOne({ username: user.username });
         if (!userData) {
             return false;
-        }else {
-            return userData;
         }
+
+        const isPasswordValid = await bcrypt.compare(user.password, userData.password);
+        if (!isPasswordValid) {
+            return false;
+        }
+
+        return userData;
     }
 }
 
@@ -130,5 +136,7 @@ mongoose.connection.on("disconnected", () => {
 module.exports = {
     mongoose,
     db,
-    userDb
+    userDb,
+    User,
+    Restaurant,
 };
