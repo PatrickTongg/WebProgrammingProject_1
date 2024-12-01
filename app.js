@@ -7,7 +7,6 @@ var apiRouter = require('./routes/api');
 var viewRouter = require('./routes/view');
 const { db ,userDb} = require('./utils/mongooseModule');
 const jwt = require('jsonwebtoken');
-const { db } = require('./utils/mongooseModule');
 var hbs = require('hbs');
 require('dotenv').config();
 
@@ -39,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/',viewRouter);
 app.use('/api', authenticateToken, apiRouter);
-app.use('/', viewRouter)
+app.use('/', authenticateToken, viewRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

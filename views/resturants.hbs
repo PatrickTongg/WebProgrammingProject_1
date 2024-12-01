@@ -7,27 +7,39 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
+{{> mainMenu}}
+<h1>Hi, {{user}}</h1>
 <h1>Restaurants</h1>
 <form id="filterForm">
     <label for="borough">Borough:</label>
-    <input type="text" id="borough" name="borough" required>
+    <input type="text" id="borough" name="borough">
 
     <label for="perPage">Restaurants per page:</label>
     <select id="perPage" name="perPage">
         <option value="5">5</option>
         <option value="10">10</option>
-        <option value="15">15</option>
+        <option value="15">15</option> 
     </select>
 
     <button type="submit">Filter</button>
 </form>
-
 <div id="restaurantList">
     {{#each restaurants}}
         <div class="restaurant">
             <h2>{{this.name}}</h2>
-            <p>{{this.cuisine}} - {{this.borough}}</p>
-            <p>{{this.address.street}}, {{this.address.building}}, {{this.address.zipcode}}</p>
+            <p><strong>Cuisine:</strong> {{this.cuisine}}</p>
+            <p><strong>Borough:</strong> {{this.borough}}</p>
+            <p><strong>Address:</strong> {{this.address.building}} {{this.address.street}}, {{this.address.zipcode}}</p>
+            <h3>Grades:</h3>
+            <ul>
+                {{#each this.grades}}
+                    <li>
+                        <strong>Date:</strong> {{this.date.$date}} - 
+                        <strong>Grade:</strong> {{this.grade}} - 
+                        <strong>Score:</strong> {{this.score}}
+                    </li>
+                {{/each}}
+            </ul>
         </div>
     {{/each}}
 </div>
@@ -35,6 +47,6 @@
 <button id="prevPage" {{#if isFirstPage}}disabled{{/if}}>Previous</button>
 <button id="nextPage" {{#if isLastPage}}disabled{{/if}}>Next</button>
 
-<script src="/javascripts/restaurantList.js"></script>
+<script src="/javascripts/restaurant.js"></script>
 </body>
 </html>

@@ -26,12 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Network response was not ok');
             }
 
-            const result = await response.json();
+            let responseData = await response.json();
 
-            if (result.success) {
-                localStorage.setItem('jwt', result.data.token);
+            if (response.status === 201) {
+                window.alert('Registration successful. Please log in.');
+                window.location.href = '/';
             } else {
-                errorContainer.innerHTML = `<p>${result.error}</p>`;
+                errorContainer.innerHTML = `<p>${responseData.message}</p>`;
             }
         } catch (error){
             errorContainer.innerHTML = `<p>${error}</p>`;
