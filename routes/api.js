@@ -70,7 +70,12 @@ router.get('/restaurants', celebrate({
 
   try {
     const restaurants = await db.getAllRestaurants(page, perPage, borough);
-    res.render('restaurants',{restaurants: restaurants, user : req.user.username});
+    res.render('restaurants',{
+      restaurants: restaurants,
+      user : req.user.username,
+      perPageOptions: [5, 10, 15],
+      boroughLabel : borough||'',
+      selectedPerPage: perPage});
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Internal Server Error' });

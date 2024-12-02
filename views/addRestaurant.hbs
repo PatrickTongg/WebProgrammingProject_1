@@ -1,13 +1,6 @@
-<!-- views/addRestaurant.hbs -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add New Restaurant</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-</head>
+
 <body>
-<!-- mainMenu}}-->
+{{> nav}}
 <h1>Add a New Restaurant</h1>
 <form id="addRestaurantForm" method="POST" action="/restaurants/add">
     <label for="name">Name:</label>
@@ -40,7 +33,5 @@
 
     <button type="submit">Add Restaurant</button>
 </form>
-
 <script src="/javascripts/addRestaurant.js"></script>
 </body>
-</html>

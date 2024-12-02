@@ -6,8 +6,10 @@ var logger = require('morgan');
 var apiRouter = require('./routes/api');
 var viewRouter = require('./routes/view');
 const { db ,userDb} = require('./utils/mongooseModule');
+const { engine } = require('express-handlebars');
 const jwt = require('jsonwebtoken');
 var hbs = require('hbs');
+const moment = require('moment');
 require('dotenv').config();
 
 const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CLUSTER_STRING}`;
@@ -16,6 +18,19 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+app.engine('hbs', engine({
+  extname: '.hbs',
+  helpers: {
+    formatDate: function (date, format) {
+      return moment(date).format(format);
+    },
+    eq: (a, b) => a === b
+  },
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true
+  }
+}));
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
@@ -36,7 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
   }
 })();
 
-app.use('/', authenticateToken, viewRouter);
+app.use('/', viewRouter);
 app.use('/api', authenticateToken, apiRouter);
 
 // catch 404 and forward to error handler
@@ -45,7 +60,8 @@ app.use(function(req, res, next) {
 });
 
 function authenticateToken(req, res, next) {
-  if (req.path === '/api/login' || req.path === '/api/register'|| req.path === '/'||req.path === '/login') {
+  if (req.path === '/api/login' || req.path === '/api/register'|| req.path === '/'||req.path === '/login'||
+      req.path === '/register') {
     return next();
   }
 

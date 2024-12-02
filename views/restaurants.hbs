@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-<!-- mainMenu}}-->
+{{> nav}}
 <h1>Hi, {{user}}</h1>
-<h1>Restaurants</h1>
+<h1>Restaurants List</h1>
 <form id="filterForm">
     <label for="borough">Borough:</label>
-    <input type="text" id="borough" name="borough">
+    <input type="text" id="borough" name="borough" value="{{boroughLabel}}">
 
     <label for="perPage">Restaurants per page:</label>
     <select id="perPage" name="perPage">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option> 
+        {{#each perPageOptions}}
+            <option value="{{this}}" {{#if (eq this ../selectedPerPage)}}selected{{/if}}>{{this}}</option>
+        {{/each}}
     </select>
 
     <button type="submit">Filter</button>
@@ -34,7 +34,7 @@
             <ul>
                 {{#each this.grades}}
                     <li>
-                        <strong>Date:</strong> {{this.date.$date}} - 
+                        <strong>Date:</strong> {{formatDate this.date "MMMM Do YYYY, h:mm:ss a"}} -
                         <strong>Grade:</strong> {{this.grade}} - 
                         <strong>Score:</strong> {{this.score}}
                     </li>
@@ -44,8 +44,8 @@
     {{/each}}
 </div>
 
-<button id="prevPage" {{#if isFirstPage}}disabled{{/if}}>Previous</button>
-<button id="nextPage" {{#if isLastPage}}disabled{{/if}}>Next</button>
+<button id="prevPage">Previous</button>
+<button id="nextPage">Next</button>
 
 <script src="/javascripts/restaurant.js"></script>
 </body>

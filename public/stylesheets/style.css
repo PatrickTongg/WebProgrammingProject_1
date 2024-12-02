@@ -1,19 +1,17 @@
-/* stylesheets/style.css */
-
-/* General link styles */
-a {
-  color: #00B7FF;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+/* General styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
 }
 
 /* Main menu styles */
 nav {
   background-color: #007bff;
-  padding: 10px;
+  padding: 15px;
   margin-bottom: 20px;
 }
 
@@ -25,41 +23,45 @@ nav ul {
 }
 
 nav ul li {
-  margin: 0 15px;
+  margin: 0 20px;
 }
 
 nav ul li a {
   color: #fff;
   font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #cce7ff;
 }
 
 /* Login page styles */
 .login-body {
-  font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100vh;
-  margin: 0;
   background-color: #f4f4f9;
 }
 
 .login-container {
   background-color: #fff;
-  padding: 20px;
+  padding: 30px;
   margin: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .login-container h1 {
   margin-bottom: 20px;
+  font-size: 24px;
 }
 
 .login-container input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -67,12 +69,13 @@ nav ul li a {
 
 .login-container button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .login-container button:hover {
@@ -90,27 +93,30 @@ nav ul li a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 #filterForm label {
   margin-right: 10px;
+  font-weight: bold;
 }
 
 #filterForm input,
 #filterForm select {
-  padding: 5px;
+  padding: 8px;
   margin-right: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 #filterForm button {
-  padding: 5px 10px;
+  padding: 8px 15px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 #filterForm button:hover {
@@ -119,37 +125,87 @@ nav ul li a {
 
 #restaurantList {
   margin-top: 20px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .restaurant {
   background-color: #fff;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.restaurant:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .restaurant h2 {
   margin: 0 0 10px 0;
+  color: #007bff;
+  font-size: 22px;
 }
 
 .restaurant p {
   margin: 5px 0;
+  color: #555;
+}
+
+.restaurant ul {
+  padding-left: 20px;
+}
+
+.restaurant ul li {
+  margin-bottom: 5px;
+  color: #666;
 }
 
 button#prevPage,
 button#nextPage {
-  padding: 5px 10px;
+  padding: 8px 15px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin: 5px;
+  transition: background-color 0.3s;
 }
 
 button#prevPage:disabled,
 button#nextPage:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #filterForm {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #filterForm label,
+  #filterForm input,
+  #filterForm select,
+  #filterForm button {
+    margin-bottom: 10px;
+  }
+}
+
+/* Focus styles for accessibility */
+a:focus,
+button:focus {
+  outline: 2px solid #0056b3;
+  outline-offset: 2px;
 }
