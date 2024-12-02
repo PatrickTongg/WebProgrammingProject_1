@@ -61,7 +61,7 @@ router.get('/restaurants', celebrate({
   [Segments.QUERY]: Joi.object().keys({
     page: Joi.number().integer().required(),
     perPage: Joi.number().integer().required(),
-    borough: Joi.string().optional() 
+    borough: Joi.string()
   })
 }), async (req, res) => {
   const page = Math.max(0, parseInt(req.query.page, 10) || 0);
@@ -70,7 +70,7 @@ router.get('/restaurants', celebrate({
 
   try {
     const restaurants = await db.getAllRestaurants(page, perPage, borough);
-    res.render('restaurants',{restaurants: restaurants, user : req.user});
+    res.render('restaurants',{restaurants: restaurants, user : req.user.username});
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Internal Server Error' });

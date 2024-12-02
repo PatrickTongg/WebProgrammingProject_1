@@ -36,16 +36,16 @@ app.use(express.static(path.join(__dirname, 'public')));
   }
 })();
 
-app.use('/',viewRouter);
+app.use('/', authenticateToken, viewRouter);
 app.use('/api', authenticateToken, apiRouter);
-app.use('/', authenticateToken, viewRouter)
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
 function authenticateToken(req, res, next) {
-  if (req.path === '/login' || req.path === '/register') {
+  if (req.path === '/api/login' || req.path === '/api/register'|| req.path === '/'||req.path === '/login') {
     return next();
   }
 

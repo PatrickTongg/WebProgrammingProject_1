@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             errorContainer.innerHTML = '<p>Logging in...</p>';
-
             const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: {
@@ -25,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ username, password })
             });
+
+            console.log(response);
 
             if (!response.ok) {
                 if (response.status === 401) {
@@ -41,9 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.token) {
                 localStorage.setItem('token', result.token);
                 localStorage.setItem('username', username);
-                fetch('/api/restaurants', {
-                    method: 'GET', 
-                    headers: {
+
+                await  fetch('/api/restaurants?page=1&perPage=10', {
+                    method: 'GET',
+                        headers: {
                         'Authorization': `Bearer ${result.token}`,
                         'Content-Type': 'application/json'
                     }
