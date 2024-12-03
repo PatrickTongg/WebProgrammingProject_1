@@ -12,7 +12,7 @@ var hbs = require('hbs');
 const moment = require('moment');
 require('dotenv').config();
 
-const mongoURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CLUSTER_STRING}`;
+const mongoURI = process.env.MONGODB_URI;
 
 var app = express();
 
