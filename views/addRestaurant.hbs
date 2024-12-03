@@ -2,15 +2,18 @@
 <body>
 {{> nav}}
 <h1>Add a New Restaurant</h1>
-<form id="addRestaurantForm" method="POST" action="/restaurants/add">
+<form id="addRestaurantForm" method="POST" action="/api/restaurants">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
+
+    <label for="restaurant_id">ID:</label>
+    <input type="number" id="restaurant_id" name="restaurant_id" required>
 
     <label for="cuisine">Cuisine:</label>
     <input type="text" id="cuisine" name="cuisine" required>
 
     <label for="borough">Borough:</label>
-    <input type="text" id="borough" name="borough" required>
+    <input type="text" id="borough" name="borough">
 
     <label for="building">Building:</label>
     <input type="text" id="building" name="building" required>
@@ -23,15 +26,20 @@
 
     <h3>Grades</h3>
     <label for="gradeDate">Date:</label>
-    <input type="date" id="gradeDate" name="gradeDate" required>
+    <input type="date" id="gradeDate" name="gradeDate">
 
     <label for="grade">Grade:</label>
-    <input type="text" id="grade" name="grade" required>
+    <input type="text" id="grade" name="grade" >
 
     <label for="score">Score:</label>
-    <input type="number" id="score" name="score" required>
+    <input type="number" id="score" name="score" >
 
     <button type="submit">Add Restaurant</button>
 </form>
+<div class="error-container">
+    {{#if error}}
+        <p>{{error}}</p>
+    {{/if}}
+</div>
 <script src="/javascripts/addRestaurant.js"></script>
 </body>

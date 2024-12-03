@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutButton.addEventListener('click', logout);
     addRestaurantButton.addEventListener('click',loadForm )
     listRestaurantsButton.addEventListener('click', fetchAndRenderRestaurants);
-    log
     async function fetchAndRenderRestaurants() {
         try {
             const response = await fetch('/api/restaurants?page=1&perPage=10',
@@ -19,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                alert('Network response was not ok');
             }
 
             const restaurants = await response.text();
@@ -40,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 })
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                alert('Network response was not ok');
             }
             const form = await response.text();
             renderRestaurants(form);
