@@ -21,18 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ username, password })
             });
+            let responseData = await response.json();
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(responseData.message);
             }
-
-            let responseData = await response.json();
 
             if (response.status === 201) {
                 window.alert('Registration successful. Please log in.');
                 window.location.href = '/';
-            } else {
-                errorContainer.innerHTML = `<p>${responseData.message}</p>`;
             }
         } catch (error){
             errorContainer.innerHTML = `<p>${error}</p>`;
