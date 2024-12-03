@@ -75,13 +75,6 @@ const db = {
         try {
             await mongoose.connect(mongoURI);
             console.log("Connected to MongoDB successfully.");
-        } catch (error) {
-            console.error("MongoDB connection error:", error);
-            process.exit(1);
-        }
-    },
-    addNewRestaurant: async (restaurant) => {
-        try {
             const result = await Restaurant.aggregate([
                 {
                     $group: {
@@ -90,9 +83,17 @@ const db = {
                     }
                 }
             ]);
+        } catch (error) {
+            console.error("MongoDB connection error:", error);
+            process.exit(1);
+        }
+    },
+    addNewRestaurant: async (restaurant) => {
+        try {
 
-            const maxRestaurantId = result.length > 0 ? result[0].maxId : 0;
-            restaurant.restaurant_id = (maxRestaurantId + 1).toString();
+
+            const maxRestaurantId = result.length > 0 ? result[0].maxId : "0";
+            restaurant.restaurant_id = parseInt(maxRestaurantId) + 1;
             const newRestaurant = new Restaurant(restaurant);
             await newRestaurant.save();
             console.log("New restaurant added to MongoDB.");

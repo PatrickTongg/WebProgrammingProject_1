@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         currentPage = 1
         localStorage.setItem('currentPage', currentPage);
+        const boroughInput = document.getElementById('borough');
+        if (isOnlySpaces(boroughInput.value)) {
+            boroughInput.value = null;
+        }
         fetchRestaurants(currentPage);
     });
 
@@ -32,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const borough = document.getElementById('borough').value || null;
         const perPage = document.getElementById('perPage').value || 10;
         window.location.href = `/api/restaurants?page=${page}&perPage=${perPage}` + (borough ? `&borough=${borough}` : '');
+    }
+    function isOnlySpaces(value) {
+        return value.trim().length === 0;
     }
 
 });

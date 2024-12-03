@@ -37,7 +37,8 @@ document.getElementById('addRestaurantForm').addEventListener('submit', function
                 console.log(data);
                 document.querySelector('.error-container').innerHTML = data.message;
             } else {
-                document.querySelector('.error-container').innerHTML = 'Restaurant Created';
+                alert('Restaurant Created Successfully.');
+                window.location.href = '/api/restaurants';
             }
         })
         .catch((error) => {
