@@ -50,7 +50,7 @@ router.post('/restaurants', celebrate({
 }), async (req, res, next) => {
   try {
     const restaurant = await db.addNewRestaurant(req.body);
-    res.status(201).send(restaurant);
+    res.status(201).send({restaurant: restaurant, message: 'Restaurant added to MongoDB.'});
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Failed to create restaurant' });

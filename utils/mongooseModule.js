@@ -50,6 +50,7 @@ const userDb= {
             console.log("New user added to MongoDB.");
         } catch (error) {
             console.error("Error adding new user to MongoDB:", error);
+            throw error;
         }
     },
     checkUser : async (user) => {
