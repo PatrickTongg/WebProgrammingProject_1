@@ -23,7 +23,6 @@ const restaurantGradeSchema = Joi.object().keys({
 });
 
 const createRestaurantSchema = Joi.object().keys({
-  restaurant_id: Joi.string().required(),
   name: Joi.string().required(),
   cuisine: Joi.string().required(),
   borough: Joi.string().optional(),
@@ -59,12 +58,12 @@ router.post('/restaurants', celebrate({
 
 router.get('/restaurants', celebrate({
   [Segments.QUERY]: Joi.object().keys({
-    page: Joi.number().integer().required(),
-    perPage: Joi.number().integer().required(),
+    page: Joi.number().integer(),
+    perPage: Joi.number().integer(),
     borough: Joi.string()
   })
 }), async (req, res) => {
-  const page = Math.max(0, parseInt(req.query.page, 10) || 0);
+  const page = Math.max(0, parseInt(req.query.page, 10) || 1);
   const perPage = Math.min(100, parseInt(req.query.perPage, 10) || 10);
   const borough = req.query.borough || null;
 

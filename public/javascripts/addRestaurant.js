@@ -6,7 +6,6 @@ document.getElementById('addRestaurantForm').addEventListener('submit', function
     const formObject = Object.fromEntries(formData.entries());
 
     const requestBody = {
-        restaurant_id: formObject.restaurant_id.toString(), // Convert to string
         name: formObject.name,
         cuisine: formObject.cuisine,
         borough: formObject.borough || null,

@@ -39,25 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (result.token) {
-                localStorage.setItem('token', result.token);
-                localStorage.setItem('username', username);
-
                 try {
-                    const response = await fetch('/api/restaurants?page=1&perPage=10',
-                        {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            }
-                        });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const html = await response.text();
-                    document.open();
-                    document.write(html);
-                    document.close();
+                    window.location.href = '/api/restaurants/';
                 } catch (error) {
                     console.error('Error fetching rendered HTML:', error);
                 }

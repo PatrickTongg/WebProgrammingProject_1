@@ -3,8 +3,9 @@ const {Model} = require("mongoose");
 const bcrypt = require('bcryptjs')
 
 
+
 const restaurantSchema = new mongoose.Schema({
-    restaurant_id: { type: String, required: true, unique: true },
+    restaurant_id: { type: Number, required: true, unique: true },
     name: { type: String, required: true },
     address: {
         building: { type: String, required: true },
@@ -12,16 +13,17 @@ const restaurantSchema = new mongoose.Schema({
         zipcode: { type: String, required: true },
         coord: { type: [Number], index: '2dsphere' }
     },
-    borough: { type: String},
+    borough: { type: String },
     cuisine: { type: String, required: true },
     grades: [
         {
-            date: { type: Date},
-            grade: { type: String},
-            score: { type: Number}
+            date: { type: Date },
+            grade: { type: String },
+            score: { type: Number }
         }
     ]
 });
+
 
 const userSchema = new mongoose.Schema({
     username :{type: String, required: true,unique: true},
@@ -78,14 +80,26 @@ const db = {
             process.exit(1);
         }
     },
-
-    addNewRestaurant : async (restaurant) => {
+    addNewRestaurant: async (restaurant) => {
         try {
+            const result = await Restaurant.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        maxId: { $max: "$restaurant_id" }
+                    }
+                }
+            ]);
+
+            const maxRestaurantId = result.length > 0 ? result[0].maxId : 0;
+            restaurant.restaurant_id = (maxRestaurantId + 1).toString();
             const newRestaurant = new Restaurant(restaurant);
             await newRestaurant.save();
             console.log("New restaurant added to MongoDB.");
+
         } catch (error) {
             console.error("Error adding new restaurant to MongoDB:", error);
+            throw error;
         }
     },
 

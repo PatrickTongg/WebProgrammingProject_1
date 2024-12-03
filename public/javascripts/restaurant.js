@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         currentPage = 1
         localStorage.setItem('currentPage', currentPage);
-        fetchRestaurants();
+        fetchRestaurants(currentPage);
     });
 
     prevPageButton.addEventListener('click', () => {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPage > 1) {
             currentPage--;
             localStorage.setItem('currentPage', currentPage);
-            fetchRestaurants();
+            fetchRestaurants(currentPage);
         }
     });
 
@@ -25,34 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.getItem('currentPage', currentPage);
         currentPage++;
         localStorage.setItem('currentPage', currentPage);
-        fetchRestaurants();
+        fetchRestaurants(currentPage);
     });
 
-    async function fetchRestaurants() {
+    async function fetchRestaurants(page) {
         const borough = document.getElementById('borough').value || null;
         const perPage = document.getElementById('perPage').value || 10;
-
-        try {
-            const response = await fetch(`/api/restaurants?page=${currentPage}&perPage=${perPage}` + (borough ? `&borough=${borough}` : ''), {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.text();
-            document.open();
-            document.write(data);
-            document.close();
-
-        } catch (error) {
-            console.error('Error fetching restaurants:', error);
-        }
+        window.location.href = `/api/restaurants?page=${page}&perPage=${perPage}` + (borough ? `&borough=${borough}` : '');
     }
 
 });
