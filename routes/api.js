@@ -155,6 +155,10 @@ router.post('/login', async (req, res, next) => {
   var response = await userDb.checkUser(user);
   if (response) {
     let token = generateAccessToken(username);
+    res.cookie('token', token, {
+      maxAge: 1000 * 60 * 60, // 1 hour
+      httpOnly: true, // Accessible only by the server
+    });
     return res.status(200).send({token});
   } else {
     return res.status(401).send({message: 'Incorrect user credentials'});
