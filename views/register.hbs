@@ -1,6 +1,7 @@
-
 <body class="login-body">
-<div class="login-container">
+<div class="login-container" style="position: relative;">
+    <a href="/" style="position: absolute; top: 10px; left: 10px; text-decoration: none; color: blue;">&larr; Back</a>
+
     <form>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" placeholder="Username" required>
@@ -8,8 +9,9 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" placeholder="Password" required>
 
-        <label for="renter-password">Password:</label>
+        <label for="renter-password">Renter Password:</label>
         <input type="password" id="renter-password" name="renter-password" placeholder="Renter Password" required>
+
         <button type="submit" id="submit">Submit</button>
     </form>
 </div>
