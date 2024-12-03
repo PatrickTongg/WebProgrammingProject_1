@@ -110,14 +110,18 @@ router.put('/restaurants/:id', celebrate({
   }
 })
 
-router.delete('/restaurants/:id', function(req, res, next) {
+router.delete('/restaurants/:id', async function (req, res, next) {
   try {
-    db.deleteRestaurantById(req.params.id).then((r) => {
-      res.status(200).send({message: `Restaurant deleted:${r.restaurant_id}`});
-    })
+    const deletedRestaurant = await db.deleteRestaurantById(req.params.id);
+
+    if (deletedRestaurant) {
+      return res.status(204).send();
+    } else {
+      return res.status(404).send({message: 'Restaurant not found'});
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: 'Failed to delete' });
+    return res.status(500).send({message: 'Failed to delete'});
   }
 })
 
