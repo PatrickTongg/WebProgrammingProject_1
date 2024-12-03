@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterForm = document.getElementById('filterForm');
     const prevPageButton = document.getElementById('prevPage');
     const nextPageButton = document.getElementById('nextPage');
+    const deleteButtons = document.querySelectorAll('.delete-btn');
 
     let currentPage = parseInt(localStorage.getItem('currentPage')) || 1;
 
@@ -30,6 +31,30 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage++;
         localStorage.setItem('currentPage', currentPage);
         fetchRestaurants(currentPage);
+    });
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const restaurantId = button.getAttribute('data-id');
+
+            if (confirm('Are you sure you want to delete this restaurant?')) {
+                try {
+                    const response = await fetch(`/api/restaurants/${restaurantId}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        alert('Restaurant deleted successfully!');
+                        location.reload();
+                    } else {
+                        alert('Failed to delete restaurant.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting restaurant:', error);
+                    alert('An error occurred.');
+                }
+            }
+        });
     });
 
     async function fetchRestaurants(page) {
