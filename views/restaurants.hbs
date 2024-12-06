@@ -1,4 +1,3 @@
-
 <body>
 {{> nav}}
 <h1>Hi, {{user}}</h1>
@@ -27,11 +26,12 @@
                 {{#each this.grades}}
                     <li>
                         <strong>Date:</strong> {{formatDate this.date "MMMM Do YYYY, h:mm:ss a"}} -
-                        <strong>Grade:</strong> {{this.grade}} - 
+                        <strong>Grade:</strong> {{this.grade}} -
                         <strong>Score:</strong> {{this.score}}
                     </li>
                 {{/each}}
             </ul>
+            <button class="edit-btn" onclick="location.href='/api/restaurants/{{this.restaurant_id}}'">Edit</button>
             <button class="delete-btn" data-id="{{this.restaurant_id}}">Delete</button>
         </div>
     {{/each}}

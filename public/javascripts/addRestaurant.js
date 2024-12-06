@@ -1,4 +1,4 @@
-document.getElementById('addRestaurantForm').addEventListener('submit', function(event) {
+document.getElementById('addRestaurantForm').addEventListener('submit', function (event) {
     event.preventDefault();
     const token = localStorage.getItem('token');
 
@@ -23,25 +23,35 @@ document.getElementById('addRestaurantForm').addEventListener('submit', function
             : []
     };
 
-    fetch(this.action, {
-        method: this.method,
+    const isCreate = this.method.toUpperCase() === 'POST';
+    const url = this.action;
+    const method = isCreate ? 'POST' : 'PUT';
+
+    fetch(url, {
+        method: method,
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestBody)
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status !== 201) {
-                console.log(data);
-                document.querySelector('.error-container').innerHTML = data.message;
-            } else {
-                alert('Restaurant Created Successfully.');
-                window.location.href = '/api/restaurants';
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Request failed');
+                });
             }
+            return response.json();
         })
-        .catch((error) => {
+        .then(data => {
+            if (isCreate) {
+                alert('Restaurant Created Successfully.');
+            } else {
+                alert('Restaurant Updated Successfully.');
+            }
+            window.location.href = '/api/restaurants';
+        })
+        .catch(error => {
             console.error('Error:', error);
             document.querySelector('.error-container').innerHTML = error.message;
         });
