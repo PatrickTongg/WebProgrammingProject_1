@@ -1,3 +1,9 @@
+/****************************************************************************** *
+ ITE5315 – Project * I declare that this assignment is my own work in accordance with Humber Academic Policy.
+ * No part of this assignment has been copied manually or electronically from any other source
+ * * (including web sites) or distributed to other students. *
+ * * Group member Name: Chak Pu Patrick Tong,Vitaly Sukhinin Student IDs: N01631495, N01605938 Date: 6/12/2024
+ * ******************************************************************************/
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
