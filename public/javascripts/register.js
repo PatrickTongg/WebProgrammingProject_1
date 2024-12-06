@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ username, password })
             });
-            let responseData = await response.json();
 
             if (!response.ok) {
+                let responseData = await response.json();
                 throw new Error(responseData.message);
             }
 
