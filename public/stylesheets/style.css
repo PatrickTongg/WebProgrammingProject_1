@@ -144,7 +144,19 @@ nav ul li a:hover {
   transform: translateY(-5px);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
+.restaurant button {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
+.restaurant button:hover {
+  background-color: #0056b3;
+}
 .restaurant h2 {
   margin: 0 0 10px 0;
   color: #007bff;
