@@ -81,18 +81,25 @@ router.get('/restaurants', celebrate({
   }
 });
 
-router.get('/restaurants/:id', async function(req, res, next) {
+router.get('/restaurants/:id', async function (req, res, next) {
   try {
     const restaurant = await db.getRestaurantById(req.params.id);
     if (!restaurant) {
       return res.status(404).send({ message: 'Restaurant not found' });
     }
-    res.status(200).send(restaurant);
+
+    res.render('addRestaurant', {
+      title: 'Edit Restaurant',
+      restaurant,
+      editMode: true,
+      actionUrl: `/api/restaurants/${req.params.id}`,
+      method: 'PUT',
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: 'Internal Server Error' });
+    res.status(500).send({ message: 'Failed to fetch restaurant' });
   }
-})
+});
 
 router.put('/restaurants/:id', celebrate({
     [Segments.BODY]: updateRestaurantSchema

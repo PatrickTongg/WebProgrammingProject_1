@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {Model} = require("mongoose");
 const bcrypt = require('bcryptjs')
+const exp = require("node:constants");
 
 
 
@@ -24,6 +25,31 @@ const restaurantSchema = new mongoose.Schema({
     ]
 });
 
+restaurantSchema.pre('save', async function (next) {
+    if (this.isNew && !this.restaurant_id) { // Only for new documents without restaurant_id
+        try {
+            const counter = await Counter.findOneAndUpdate(
+                { name: 'restaurant_id' },
+                { $inc: { value: 1 } }, // Increment counter value
+                { new: true } // Return the updated document
+            );
+
+            if (!counter) {
+                throw new Error('Counter not found. Ensure it is initialized.');
+            }
+
+            this.restaurant_id = counter.value; // Assign the counter value to restaurant_id
+            next();
+        } catch (err) {
+            console.error('Error in pre-save middleware:', err);
+            next(err);
+        }
+    } else {
+        next();
+    }
+});
+
+
 
 const userSchema = new mongoose.Schema({
     username :{type: String, required: true,unique: true},
@@ -31,8 +57,15 @@ const userSchema = new mongoose.Schema({
 
 });
 
+const counterSchema = new mongoose.Schema({
+    name: String, // Name of the counter
+    value: Number, // Current counter value
+});
+
+
 const User = mongoose.model('users', userSchema);
 const Restaurant = mongoose.model('restaurants', restaurantSchema);
+const Counter = mongoose.model('Counter', counterSchema);
 
 const userDb= {
     initialize : async (mongoURI) => {
@@ -90,10 +123,7 @@ const db = {
     },
     addNewRestaurant: async (restaurant) => {
         try {
-
-
-            const maxRestaurantId = result.length > 0 ? result[0].maxId : "0";
-            restaurant.restaurant_id = parseInt(maxRestaurantId) + 1;
+            restaurant.restaurant_id = await db.getNextSequence('restaurant_id');
             const newRestaurant = new Restaurant(restaurant);
             await newRestaurant.save();
             console.log("New restaurant added to MongoDB.");
@@ -102,6 +132,14 @@ const db = {
             console.error("Error adding new restaurant to MongoDB:", error);
             throw error;
         }
+    },
+    async getNextSequence(name) {
+        const result = await Counter.findOneAndUpdate(
+            { name },
+            { $inc: { value: 1 } },
+            { new: true, upsert: true }
+        );
+        return result.value;
     },
 
     getAllRestaurants :async (page, perPage, borough) => {
