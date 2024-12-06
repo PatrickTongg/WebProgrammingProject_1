@@ -1,37 +1,81 @@
-
 <body>
 {{> nav}}
-<h1>Add a New Restaurant</h1>
-<form id="addRestaurantForm" method="POST" action="/api/restaurants">
+<h1>{{#if restaurant}}Edit Restaurant{{else}}Add a New Restaurant{{/if}}</h1>
+<form
+        id="addRestaurantForm"
+        method="{{#if restaurant}}PUT{{else}}POST{{/if}}"
+        action="{{#if restaurant}}/api/restaurants/{{restaurant.restaurant_id}}{{else}}/api/restaurants{{/if}}">
+
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
+    <input
+            type="text"
+            id="name"
+            name="name"
+            value="{{#if restaurant}}{{restaurant.name}}{{/if}}"
+            required>
 
     <label for="cuisine">Cuisine:</label>
-    <input type="text" id="cuisine" name="cuisine" required>
+    <input
+            type="text"
+            id="cuisine"
+            name="cuisine"
+            value="{{#if restaurant}}{{restaurant.cuisine}}{{/if}}"
+            required>
 
     <label for="borough">Borough:</label>
-    <input type="text" id="borough" name="borough">
+    <input
+            type="text"
+            id="borough"
+            name="borough"
+            value="{{#if restaurant}}{{restaurant.borough}}{{/if}}">
 
     <label for="building">Building:</label>
-    <input type="text" id="building" name="building" required>
+    <input
+            type="text"
+            id="building"
+            name="building"
+            value="{{#if restaurant}}{{restaurant.address.building}}{{/if}}"
+            required>
 
     <label for="street">Street:</label>
-    <input type="text" id="street" name="street" required>
+    <input
+            type="text"
+            id="street"
+            name="street"
+            value="{{#if restaurant}}{{restaurant.address.street}}{{/if}}"
+            required>
 
     <label for="zipcode">Zipcode:</label>
-    <input type="text" id="zipcode" name="zipcode" required>
+    <input
+            type="text"
+            id="zipcode"
+            name="zipcode"
+            value="{{#if restaurant}}{{restaurant.address.zipcode}}{{/if}}"
+            required>
 
     <h3>Grades</h3>
     <label for="gradeDate">Date:</label>
-    <input type="date" id="gradeDate" name="gradeDate">
+    <input
+            type="date"
+            id="gradeDate"
+            name="gradeDate"
+            value="{{#if restaurant.grades.[0]}}{{restaurant.grades.[0].date}}{{/if}}">
 
     <label for="grade">Grade:</label>
-    <input type="text" id="grade" name="grade" >
+    <input
+            type="text"
+            id="grade"
+            name="grade"
+            value="{{#if restaurant.grades.[0]}}{{restaurant.grades.[0].grade}}{{/if}}">
 
     <label for="score">Score:</label>
-    <input type="number" id="score" name="score" >
+    <input
+            type="number"
+            id="score"
+            name="score"
+            value="{{#if restaurant.grades.[0]}}{{restaurant.grades.[0].score}}{{/if}}">
 
-    <button type="submit">Add Restaurant</button>
+    <button type="submit">{{#if restaurant}}Update Restaurant{{else}}Add Restaurant{{/if}}</button>
 </form>
 <div class="error-container">
     {{#if error}}

@@ -67,6 +67,7 @@ function authenticateToken(req, res, next) {
   const token = req.cookies['token'];;
 
   if (!token) {
+    res.redirect('/login');
     return res.status(401).json({ message: 'Access token is missing or invalid' });
   }
 
